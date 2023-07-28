@@ -157,7 +157,6 @@ async function readExcel(filePath) {
 //Generate Proper json
 async function generateProperJSON(data) {
   var columnData = [];
-  console.log(data);
   for (let j = 0; j < Object.keys(data[0]).length; j = j + 2) {
     const newGroup = {
       name: "",
