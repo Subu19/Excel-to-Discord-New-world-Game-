@@ -164,7 +164,10 @@ function replaceRoleName(role) {
 
 // Command to import and send Excel data to Discord
 client.on("messageCreate", async (message) => {
-  if (message.content === "!import" && !message.author.bot) {
+  /////////import command
+  if (message.content === "n!import") {
+    if (!message.member.permissionsIn(message.channel).has("Administrator"))
+      return message.channel.send("You are not an admin");
     const data = await readExcel("./test.xlsx");
     const columnData = await generateProperJSON(data);
     const embed = new Discord.EmbedBuilder();
@@ -209,7 +212,10 @@ client.on("messageCreate", async (message) => {
     await message.channel.send({ embeds: [embed] });
   }
 
-  if (message.content == "!updatechannel" && !message.author.bot) {
+  ///////////////////////// update command//////////////////////
+  if (message.content == "n!updatechannel" && !message.author.bot) {
+    if (!message.member.permissionsIn(message.channel).has("Administrator"))
+      return message.channel.send("You are not an admin");
     message.channel.send("Done").then((msg) => {
       setTimeout(() => {
         msg.delete();
@@ -231,7 +237,11 @@ client.on("messageCreate", async (message) => {
       }
     );
   }
-  if (message.content == "!stopupdate") {
+
+  //////////////////////stop command.//////////////////////////
+  if (message.content == "n!stopupdate") {
+    if (!message.member.permissionsIn(message.channel).has("Administrator"))
+      return message.channel.send("You are not an admin");
     var newConfig = config;
     newConfig.channel = "";
     newConfig.last_message = "";
@@ -248,7 +258,17 @@ client.on("messageCreate", async (message) => {
       }
     );
   }
-  if (message.content == "!test") {
-    message.channel.send("hi");
+
+  ////////////////////help command ////////////////////////////
+  if (message.content == "n!help") {
+    const embed = new Discord.EmbedBuilder();
+    embed.setTitle("My commands are:");
+    embed.addFields({ name: "n!stopupdate", value: "Stop updating roles" });
+    embed.addFields({
+      name: "n!updatechannel",
+      value: "Set channel to send updates",
+    });
+    embed.addFields({ name: "n!import", value: "Sends you role embed" });
+    message.channel.send({ embeds: [embed] });
   }
 });
