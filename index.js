@@ -47,6 +47,7 @@ async function fetchPlayers() {
   embed.setFooter({
     text: "⚔️ Assassin (Melee), 🏹 Assassin (Ranged), 🟠 Bruiser, 🔵 DPS: Blunderbuss/Ice, 🟡 DPS: Fire staff, 🟢 Healer, 🟣 Support, 🦾 Tank",
   });
+  embed.setImage("https://i.ytimg.com/vi/oK2qg_OjqD8/maxresdefault.jpg");
   for (let i = 0; i < columnData.length; i++) {
     const element = columnData[i];
     var players = [];
@@ -130,13 +131,13 @@ async function readExcel(filePath) {
 //Generate Proper json
 async function generateProperJSON(data) {
   var columnData = [];
-
+  console.log(data);
   for (let j = 0; j < Object.keys(data[0]).length; j = j + 2) {
     const newGroup = {
       name: "",
       players: [],
     };
-    newGroup.name = "Group" + (j + 2) / 2;
+    newGroup.name = Object.keys(data[0])[j];
     for await (const element of data) {
       newGroup.players.push({
         name: Object.values(element)[j],
