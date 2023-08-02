@@ -54,6 +54,7 @@ async function fetchPlayers() {
     const element = columnData[i];
     var players = [];
     await element.players.forEach((player, i) => {
+      console.log(player);
       if (
         client.guilds.cache
           .get(process.env.GUILD)
@@ -143,9 +144,15 @@ async function readExcel(filePath) {
       .then((res) => {
         const workbook = xlsx.read(res.data, {
           type: "buffer",
+          sheetStubs: true,
         });
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        resolve(xlsx.utils.sheet_to_json(worksheet, { blankrows: true }));
+        resolve(
+          xlsx.utils.sheet_to_json(worksheet, {
+            skipHidden: false,
+            blankrows: true,
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -176,16 +183,22 @@ async function generateProperJSON(data) {
 
 ////////REPLACE ROLENAME
 function replaceRoleName(role) {
-  return role
-    .replace("Assassin (Melee)", "🔴")
-    .replace("Assassin (Ranged)", "🏹")
-    .replace("Bruiser", "🟠")
-    .replace("DPS: Blunderbuss/Ice", "⚪")
-    .replace("DPS: Fire staff", "🔵")
-    .replace("Healer", "🟢")
-    .replace("VG IG", "🟣")
-    .replace("Tank", "🟡")
-    .replace("Spear IG", "🟤");
+  try {
+    if (role == undefined) {
+    }
+    return role
+      .replace("Assassin (Melee)", "🔴")
+      .replace("Assassin (Ranged)", "🏹")
+      .replace("Bruiser", "🟠")
+      .replace("DPS: Blunderbuss/Ice", "⚪")
+      .replace("DPS: Fire staff", "🔵")
+      .replace("Healer", "🟢")
+      .replace("VG IG", "🟣")
+      .replace("Tank", "🟡")
+      .replace("Spear IG", "🟤");
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 // Command to import and send Excel data to Discord
@@ -207,6 +220,7 @@ client.on("messageCreate", async (message) => {
         const element = columnData[i];
         var players = [];
         await element.players.forEach((player, i) => {
+          console.log(player);
           if (
             client.guilds.cache
               .get(process.env.GUILD)
